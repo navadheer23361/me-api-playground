@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Me API Playground</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+    
+<body>
+
+<h1>My Profile</h1>
+<div id="profile"></div>
+
+<h2>Search by Skill</h2>
+<input id="skill">
+<button onclick="bySkill()">Search</button>
+
+<h2>Search Projects</h2>
+<input id="query">
+<button onclick="search()">Search</button>
+
+<div id="projects"></div>
+
+<script>
+const API = "http://127.0.0.1:8000"
+
+fetch(API+"/profile")
+.then(r=>r.json())
+.then(p=>{
+  document.getElementById("profile").innerHTML =
+  `Name: ${p.name}<br>Email: ${p.email}<br>Education: ${p.education}`
+})
+
+function bySkill(){
+  let s = document.getElementById("skill").value
+  fetch(API+"/projects?skill="+s)
+  .then(r=>r.json())
+  .then(show)
+}
+
+function search(){
+  let q = document.getElementById("query").value
+  fetch(API+"/search?q="+q)
+  .then(r=>r.json())
+  .then(show)
+}
+
+function show(data){
+  let html=""
+  data.forEach(p=>{
+    html+=`<p><b>${p.title}</b> - ${p.description}</p>`
+  })
+  document.getElementById("projects").innerHTML = html
+}
+</script>
+
+</body>
+</html>
